@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restapi-pod
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      api: rest
+  template:
+    metadata:
+      labels:
+        api: rest
+    spec:
+      containers:
+      - name: restapi
+        image: vad1mo/hello-world-rest:latest
+        imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restapi-service
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    api: rest
+  ports:
+  - port: 5050
+    targetPort: 5050
+    nodePort: 30001
